@@ -1,5 +1,5 @@
 <?php
-$servername = "localhost";
+$servername = "	185.199.108.153";
 $username = "root";  // Schimbă aceste detalii după necesitate
 $password = "";
 $dbname = "EventsDB";

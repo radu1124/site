@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Căutare Evenimente</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        form { margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #f4f4f4; }
+    </style>
+</head>
+<body>
+
+<h1>Căutare Evenimente</h1>
+
+<form id="searchForm">
+    <label for="city">Oraș:</label>
+    <select id="city" name="city">
+        <option value="">Toate</option>
+        <option value="1">București</option>
+        <option value="2">Cluj-Napoca</option>
+        <option value="3">Iași</option>
+    </select>
+
+    <label for="eventType">Tip de Eveniment:</label>
+    <select id="eventType" name="eventType">
+        <option value="">Toate</option>
+        <option value="1">Concert</option>
+        <option value="2">Teatru</option>
+        <option value="3">Conferință</option>
+    </select>
+
+    <label for="startTime">Ora de început:</label>
+    <input type="datetime-local" id="startTime" name="startTime">
+
+    <label for="endTime">Ora de sfârșit:</label>
+    <input type="datetime-local" id="endTime" name="endTime">
+
+    <button type="button" onclick="searchEvents()">Caută</button>
+</form>
+
+<table id="resultsTable">
+    <thead>
+        <tr>
+            <th>Nume Eveniment</th>
+            <th>Oraș</th>
+            <th>Tip</th>
+            <th>Ora</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Rezultatele vor fi afișate aici -->
+    </tbody>
+</table>
+
+<script>
+    function searchEvents() {
+        const city = document.getElementById("city").value;
+        const eventType = document.getElementById("eventType").value;
+        const startTime = document.getElementById("startTime").value;
+        const endTime = document.getElementById("endTime").value;
+
+        fetch(`search_events.php?city=${city}&eventType=${eventType}&startTime=${startTime}&endTime=${endTime}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultsTable = document.getElementById("resultsTable").getElementsByTagName("tbody")[0];
+                resultsTable.innerHTML = "";
+                data.forEach(event => {
+                    const row = resultsTable.insertRow();
+                    row.insertCell(0).innerText = event.event_name;
+                    row.insertCell(1).innerText = event.city_name;
+                    row.insertCell(2).innerText = event.type_name;
+                    row.insertCell(3).innerText = event.event_time;
+                });
+            })
+            .catch(error => console.error("Eroare:", error));
+    }
+</script>
+
+</body>
+</html>
